@@ -6,6 +6,7 @@ const fccTesting  = require('./freeCodeCamp/fcctesting.js');
 const session     = require('express-session');
 const mongo       = require('mongodb').MongoClient;
 const passport    = require('passport');
+const GithubStrategy = require('passport-github').Strategy;
 
 const app = express();
 
@@ -62,6 +63,13 @@ mongo.connect(process.env.DATABASE, (err, db) => {
         res.redirect('/profile');
       });
       
+      passport.use(new GithubStrategy({
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: "https://bpc-socialauth.url/auth/github/callback"
+      }, function(accessToken, refreshToken, profile, cb){
+        console.log(profile);
+      }));
       
       
       
